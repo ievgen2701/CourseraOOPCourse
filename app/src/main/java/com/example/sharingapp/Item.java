@@ -17,28 +17,29 @@ public class Item {
     private String description;
     private Dimensions dimensions;
     private String status;
-    private String borrower;
+    private Contact borrower;
     protected transient Bitmap image;
     protected String image_base64;
     private String id;
 
-    public Item(String title, String maker, String description, Dimensions dimensions, Bitmap image, String id) {
+    public Item(String title, String maker, String description,
+                Dimensions dimensions, Bitmap image, String id) {
         this.title = title;
         this.maker = maker;
         this.description = description;
         this.dimensions = dimensions;
         this.status = "Available";
-        this.borrower = "";
+        this.borrower = null;
         addImage(image);
 
-        if (id == null){
+        if (id == null) {
             setId();
         } else {
             updateId(id);
         }
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -46,7 +47,7 @@ public class Item {
         this.id = UUID.randomUUID().toString();
     }
 
-    public void updateId(String id){
+    public void updateId(String id) {
         this.id = id;
     }
 
@@ -55,7 +56,7 @@ public class Item {
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public void setMaker(String maker) {
@@ -63,7 +64,7 @@ public class Item {
     }
 
     public String getMaker() {
-        return maker;
+        return this.maker;
     }
 
     public void setDescription(String description) {
@@ -71,7 +72,7 @@ public class Item {
     }
 
     public String getDescription() {
-        return description;
+        return this.description;
     }
 
     public void setDimensions(Dimensions dimensions) {
@@ -79,7 +80,7 @@ public class Item {
     }
 
     public Dimensions getDimensions() {
-        return dimensions;
+        return this.dimensions;
     }
 
     public void setStatus(String status) {
@@ -87,33 +88,33 @@ public class Item {
     }
 
     public String getStatus() {
-        return status;
+        return this.status;
     }
 
-    public void setBorrower(String borrower) {
+    public void setBorrower(Contact borrower) {
         this.borrower = borrower;
     }
 
-    public String getBorrower() {
-        return borrower;
+    public Contact getBorrower() {
+        return this.borrower;
     }
 
-    public void addImage(Bitmap new_image){
+    public void addImage(Bitmap new_image) {
         if (new_image != null) {
-            image = new_image;
+            this.image = new_image;
             ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
             new_image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
             byte[] b = byteArrayBitmapStream.toByteArray();
-            image_base64 = Base64.encodeToString(b, Base64.DEFAULT);
+            this.image_base64 = Base64.encodeToString(b, Base64.DEFAULT);
         }
     }
 
-    public Bitmap getImage(){
-        if (image == null && image_base64 != null) {
-            byte[] decodeString = Base64.decode(image_base64, Base64.DEFAULT);
-            image = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
+    public Bitmap getImage() {
+        if (this.image == null && this.image_base64 != null) {
+            byte[] decodeString = Base64.decode(this.image_base64, Base64.DEFAULT);
+            this.image = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
         }
-        return image;
+        return this.image;
     }
 }
 
