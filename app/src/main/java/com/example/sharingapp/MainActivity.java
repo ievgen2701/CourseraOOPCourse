@@ -14,7 +14,7 @@ import android.view.View;
 /**
  * Home Activity of the App
  */
-public class MainActivity extends AppCompatActivity {
+public final class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

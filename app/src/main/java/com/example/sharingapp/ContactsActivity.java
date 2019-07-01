@@ -3,7 +3,7 @@ package com.example.sharingapp;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class ContactsActivity extends AppCompatActivity {
+public final class ContactsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
