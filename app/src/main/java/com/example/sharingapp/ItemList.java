@@ -17,7 +17,7 @@ import java.util.ArrayList;
 /**
  * ItemList class
  */
-public class    ItemList {
+public final class ItemList {
 
     private static ArrayList<Item> items;
     private String FILENAME = "items.sav";
@@ -52,7 +52,7 @@ public class    ItemList {
             if (item.getId().equals(i.getId())) {
                 return pos;
             }
-            pos = pos+1;
+            pos = pos + 1;
         }
         return -1;
     }
@@ -64,10 +64,11 @@ public class    ItemList {
     public void loadItems(Context context) {
 
         try {
-            FileInputStream fis = context.openFileInput(FILENAME);
+            FileInputStream fis = context.openFileInput(this.FILENAME);
             InputStreamReader isr = new InputStreamReader(fis);
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Item>>() {}.getType();
+            Type listType = new TypeToken<ArrayList<Item>>() {
+            }.getType();
             items = gson.fromJson(isr, listType); // temporary
             fis.close();
         } catch (FileNotFoundException e) {
@@ -79,7 +80,7 @@ public class    ItemList {
 
     public void saveItems(Context context) {
         try {
-            FileOutputStream fos = context.openFileOutput(FILENAME, 0);
+            FileOutputStream fos = context.openFileOutput(this.FILENAME, 0);
             OutputStreamWriter osw = new OutputStreamWriter(fos);
             Gson gson = new Gson();
             gson.toJson(items, osw);
@@ -92,14 +93,26 @@ public class    ItemList {
         }
     }
 
-    public ArrayList<Item> filterItemsByStatus(String status){
+    public ArrayList<Item> filterItemsByStatus(String status) {
         ArrayList<Item> selected_items = new ArrayList<>();
-        for (Item i: items) {
+        for (Item i : items) {
             if (i.getStatus().equals(status)) {
                 selected_items.add(i);
             }
         }
         return selected_items;
     }
+
+    public ArrayList<Contact> getActiveBorrowers() {
+        ArrayList<Contact> active_borrowers = new ArrayList<Contact>();
+        for (Item i : items) {
+            Contact borrower = i.getBorrower();
+            if (borrower != null) {
+                active_borrowers.add(borrower);
+            }
+        }
+        return active_borrowers;
+    }
+
 }
 
