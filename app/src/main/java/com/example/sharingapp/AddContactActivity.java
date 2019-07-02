@@ -9,7 +9,8 @@ import android.widget.EditText;
 /**
  * Add a new contact
  */
-public class AddContactActivity extends AppCompatActivity {
+public final class AddContactActivity extends AppCompatActivity {
+
     private final ContactList contact_list = new ContactList();
     private Context context;
     private EditText username;

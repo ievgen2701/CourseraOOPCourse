@@ -10,20 +10,17 @@ import java.util.ArrayList;
 /**
  * Displays a list of all "Borrowed" items
  */
-public class BorrowedItemsFragment extends ItemsFragment {
+public final class BorrowedItemsFragment extends ItemsFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        super.onCreateView(inflater,container, savedInstanceState);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         super.setVariables(R.layout.borrowed_items_fragment, R.id.my_borrowed_items);
         super.setAdapter(BorrowedItemsFragment.this);
-
-        return rootView;
+        return this.rootView;
     }
 
     public ArrayList<Item> filterItems() {
-        String status = "Borrowed";
-        return item_list.filterItemsByStatus(status);
+        return this.item_list.filterItemsByStatus("Borrowed");
     }
 }

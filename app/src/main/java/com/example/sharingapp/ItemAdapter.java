@@ -15,13 +15,13 @@ import java.util.ArrayList;
 /**
  * Item Adapter is responsible for what information is displayed in ListView entries.
  */
-public class ItemAdapter extends ArrayAdapter<Item> {
+public final class ItemAdapter extends ArrayAdapter<Item> {
 
-    private LayoutInflater inflater;
-    private Fragment fragment;
-    private Context context;
+    private final LayoutInflater inflater;
+    private final Fragment fragment;
+    private final Context context;
 
-    public ItemAdapter(Context context, ArrayList<Item> items, Fragment fragment) {
+    public ItemAdapter(final Context context, final ArrayList<Item> items, final Fragment fragment) {
         super(context, 0, items);
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -29,28 +29,28 @@ public class ItemAdapter extends ArrayAdapter<Item> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
 
         // getItem(position) gets the "item" at "position" in the "items" ArrayList
         // (where "items" is a parameter in the ItemAdapter creator as seen above ^^)
         // Note: getItem() is not a user-defined method in the Item/ItemList class!
         // The "Item" in the method name is a coincidence...
-        Item item = getItem(position);
+        final Item item = getItem(position);
 
-        String title = "Title: " + item.getTitle();
-        String description = "Description: " + item.getDescription();
-        Bitmap thumbnail = item.getImage();
-        String status = "Status: " + item.getStatus();
+        final String title = "Title: " + item.getTitle();
+        final String description = "Description: " + item.getDescription();
+        final Bitmap thumbnail = item.getImage();
+        final String status = "Status: " + item.getStatus();
 
         // Check if an existing view is being reused, otherwise inflate the view.
         if (convertView == null) {
-            convertView = inflater.from(context).inflate(R.layout.itemlist_item, parent, false);
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.itemlist_item, parent, false);
         }
 
-        TextView title_tv = (TextView) convertView.findViewById(R.id.title_tv);
-        TextView status_tv = (TextView) convertView.findViewById(R.id.status_tv);
-        TextView description_tv = (TextView) convertView.findViewById(R.id.description_tv);
-        ImageView photo = (ImageView) convertView.findViewById(R.id.image_view);
+        final TextView title_tv = convertView.findViewById(R.id.title_tv);
+        final TextView status_tv = convertView.findViewById(R.id.status_tv);
+        final TextView description_tv = convertView.findViewById(R.id.description_tv);
+        final ImageView photo = convertView.findViewById(R.id.image_view);
 
         if (thumbnail != null) {
             photo.setImageBitmap(thumbnail);
@@ -62,12 +62,12 @@ public class ItemAdapter extends ArrayAdapter<Item> {
         description_tv.setText(description);
 
         // AllItemFragments: itemlist_item shows title, description and status
-        if (fragment instanceof AllItemsFragment ) {
+        if (this.fragment instanceof AllItemsFragment ) {
             status_tv.setText(status);
         }
 
         // BorrowedItemsFragment/AvailableItemsFragment: itemlist_item shows title and description only
-        if (fragment instanceof BorrowedItemsFragment || fragment instanceof AvailableItemsFragment) {
+        if (this.fragment instanceof BorrowedItemsFragment || this.fragment instanceof AvailableItemsFragment) {
             status_tv.setVisibility(View.GONE);
         }
 

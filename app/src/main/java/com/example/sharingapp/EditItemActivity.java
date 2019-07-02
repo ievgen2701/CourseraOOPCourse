@@ -18,7 +18,7 @@ import android.widget.TextView;
  * Editing a pre-existing item consists of deleting the old item and adding a new item with the old
  * item's id.
  */
-public class EditItemActivity extends AppCompatActivity {
+public final class EditItemActivity extends AppCompatActivity {
 
     private final ItemList item_list = new ItemList();
     private Item item;
@@ -36,7 +36,6 @@ public class EditItemActivity extends AppCompatActivity {
     private EditText length;
     private EditText width;
     private EditText height;
-    private EditText borrower;
     private Spinner borrower_spinner;
     private TextView borrower_tv;
     private Switch status;
@@ -63,7 +62,7 @@ public class EditItemActivity extends AppCompatActivity {
         this.item_list.loadItems(this.context);
         this.contact_list.loadContacts(this.context);
 
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        final ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_dropdown_item,
                 this.contact_list.getAllUsernames());
         this.borrower_spinner.setAdapter(adapter);
@@ -74,7 +73,7 @@ public class EditItemActivity extends AppCompatActivity {
         this.item = this.item_list.getItem(pos);
 
         final Contact contact = this.item.getBorrower();
-        if (contact != null){
+        if (contact != null) {
             final int contact_pos = this.contact_list.getIndex(contact);
             this.borrower_spinner.setSelection(contact_pos);
         }
@@ -95,7 +94,7 @@ public class EditItemActivity extends AppCompatActivity {
             this.status.setChecked(false);
         } else {
             this.borrower_tv.setVisibility(View.GONE);
-            this.borrower.setVisibility(View.GONE);
+            this.borrower_spinner.setVisibility(View.GONE);
         }
 
         this.image = this.item.getImage();
@@ -216,7 +215,7 @@ public class EditItemActivity extends AppCompatActivity {
             this.item.setStatus("Available");
         } else {
             // Means not borrowed
-            if (this.contact_list.getSize()==0){
+            if (this.contact_list.getSize() == 0) {
                 // No contacts, need to add contacts to be able to add a borrower.
                 this.invisible.setEnabled(false);
                 this.invisible.setVisibility(View.VISIBLE);

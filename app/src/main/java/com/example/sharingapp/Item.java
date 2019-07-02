@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * Item class
  */
-public class Item {
+public final class Item {
 
     private String title;
     private String maker;
@@ -22,8 +22,8 @@ public class Item {
     protected String image_base64;
     private String id;
 
-    public Item(String title, String maker, String description,
-                Dimensions dimensions, Bitmap image, String id) {
+    public Item(final String title, final String maker, final String description,
+                final Dimensions dimensions, final Bitmap image, final String id) {
         this.title = title;
         this.maker = maker;
         this.description = description;
@@ -47,11 +47,11 @@ public class Item {
         this.id = UUID.randomUUID().toString();
     }
 
-    public void updateId(String id) {
+    public void updateId(final String id) {
         this.id = id;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(final String title) {
         this.title = title;
     }
 
@@ -59,7 +59,7 @@ public class Item {
         return this.title;
     }
 
-    public void setMaker(String maker) {
+    public void setMaker(final String maker) {
         this.maker = maker;
     }
 
@@ -67,7 +67,7 @@ public class Item {
         return this.maker;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -75,7 +75,7 @@ public class Item {
         return this.description;
     }
 
-    public void setDimensions(Dimensions dimensions) {
+    public void setDimensions(final Dimensions dimensions) {
         this.dimensions = dimensions;
     }
 
@@ -83,7 +83,7 @@ public class Item {
         return this.dimensions;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(final String status) {
         this.status = status;
     }
 
@@ -91,7 +91,7 @@ public class Item {
         return this.status;
     }
 
-    public void setBorrower(Contact borrower) {
+    public void setBorrower(final Contact borrower) {
         this.borrower = borrower;
     }
 
@@ -99,19 +99,19 @@ public class Item {
         return this.borrower;
     }
 
-    public void addImage(Bitmap new_image) {
+    public void addImage(final Bitmap new_image) {
         if (new_image != null) {
             this.image = new_image;
-            ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+            final ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
             new_image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
-            byte[] b = byteArrayBitmapStream.toByteArray();
+            final byte[] b = byteArrayBitmapStream.toByteArray();
             this.image_base64 = Base64.encodeToString(b, Base64.DEFAULT);
         }
     }
 
     public Bitmap getImage() {
         if (this.image == null && this.image_base64 != null) {
-            byte[] decodeString = Base64.decode(this.image_base64, Base64.DEFAULT);
+            final byte[] decodeString = Base64.decode(this.image_base64, Base64.DEFAULT);
             this.image = BitmapFactory.decodeByteArray(decodeString, 0, decodeString.length);
         }
         return this.image;

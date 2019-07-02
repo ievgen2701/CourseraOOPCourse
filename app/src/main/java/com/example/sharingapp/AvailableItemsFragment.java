@@ -10,20 +10,17 @@ import java.util.ArrayList;
 /**
  * Displays a list of all "Available" items
  */
-public class AvailableItemsFragment extends ItemsFragment{
+public final class AvailableItemsFragment extends ItemsFragment {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        super.onCreateView(inflater,container, savedInstanceState);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         super.setVariables(R.layout.available_items_fragment, R.id.my_available_items);
         super.setAdapter(AvailableItemsFragment.this);
-
-        return rootView;
+        return this.rootView;
     }
 
     public ArrayList<Item> filterItems() {
-        String status = "Available";
-        return item_list.filterItemsByStatus(status);
+        return this.item_list.filterItemsByStatus("Available");
     }
 }

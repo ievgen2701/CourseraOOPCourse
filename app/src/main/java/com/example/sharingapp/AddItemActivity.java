@@ -13,7 +13,7 @@ import android.widget.ImageView;
 /**
  * Add a new item
  */
-public class AddItemActivity extends AppCompatActivity {
+public final class AddItemActivity extends AppCompatActivity {
 
     private EditText title;
     private EditText maker;
@@ -24,98 +24,98 @@ public class AddItemActivity extends AppCompatActivity {
 
     private ImageView photo;
     private Bitmap image;
-    private int REQUEST_CODE = 1;
+    private final int REQUEST_CODE = 1;
 
-    private ItemList item_list = new ItemList();
+    private final ItemList item_list = new ItemList();
     private Context context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
-        title = (EditText) findViewById(R.id.title);
-        maker = (EditText) findViewById(R.id.maker);
-        description = (EditText) findViewById(R.id.description);
-        length = (EditText) findViewById(R.id.length);
-        width = (EditText) findViewById(R.id.width);
-        height = (EditText) findViewById(R.id.height);
-        photo = (ImageView) findViewById(R.id.image_view);
+        this.title = findViewById(R.id.title);
+        this.maker = findViewById(R.id.maker);
+        this.description = findViewById(R.id.description);
+        this.length = findViewById(R.id.length);
+        this.width = findViewById(R.id.width);
+        this.height = findViewById(R.id.height);
+        this.photo = findViewById(R.id.image_view);
 
-        photo.setImageResource(android.R.drawable.ic_menu_gallery);
+        this.photo.setImageResource(android.R.drawable.ic_menu_gallery);
 
-        context = getApplicationContext();
-        item_list.loadItems(context);
+        this.context = getApplicationContext();
+        this.item_list.loadItems(this.context);
     }
 
-    public void saveItem (View view) {
+    public void saveItem (final View view) {
 
-        String title_str = title.getText().toString();
-        String maker_str = maker.getText().toString();
-        String description_str = description.getText().toString();
-        String length_str = length.getText().toString();
-        String width_str = width.getText().toString();
-        String height_str = height.getText().toString();
+        final String title_str = this.title.getText().toString();
+        final String maker_str = this.maker.getText().toString();
+        final String description_str = this.description.getText().toString();
+        final String length_str = this.length.getText().toString();
+        final String width_str = this.width.getText().toString();
+        final String height_str = this.height.getText().toString();
 
         if (title_str.equals("")) {
-            title.setError("Empty field!");
+            this.title.setError("Empty field!");
             return;
         }
 
         if (maker_str.equals("")) {
-            maker.setError("Empty field!");
+            this.maker.setError("Empty field!");
             return;
         }
 
         if (description_str.equals("")) {
-            description.setError("Empty field!");
+            this.description.setError("Empty field!");
             return;
         }
 
         if (length_str.equals("")) {
-            length.setError("Empty field!");
+            this.length.setError("Empty field!");
             return;
         }
 
         if (width_str.equals("")) {
-            width.setError("Empty field!");
+            this.width.setError("Empty field!");
             return;
         }
 
         if (height_str.equals("")) {
-            height.setError("Empty field!");
+            this.height.setError("Empty field!");
             return;
         }
 
-        Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
-        Item item = new Item(title_str, maker_str, description_str, dimensions, image, null );
+        final Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
+        final Item item = new Item(title_str, maker_str, description_str, dimensions, this.image, null );
 
-        item_list.addItem(item);
-        item_list.saveItems(context);
+        this.item_list.addItem(item);
+        this.item_list.saveItems(this.context);
 
         // End AddItemActivity
-        Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void addPhoto(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    public void addPhoto(final View view) {
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_CODE);
+            startActivityForResult(intent, this.REQUEST_CODE);
         }
     }
 
-    public void deletePhoto(View view) {
-        image = null;
-        photo.setImageResource(android.R.drawable.ic_menu_gallery);
+    public void deletePhoto(final View view) {
+        this.image = null;
+        this.photo.setImageResource(android.R.drawable.ic_menu_gallery);
     }
 
     @Override
-    protected void onActivityResult(int request_code, int result_code, Intent intent){
-        if (request_code == REQUEST_CODE && result_code == RESULT_OK){
-            Bundle extras = intent.getExtras();
-            image = (Bitmap) extras.get("data");
-            photo.setImageBitmap(image);
+    protected void onActivityResult(final int request_code, final int result_code, final Intent intent){
+        if (request_code == this.REQUEST_CODE && result_code == RESULT_OK){
+            final Bundle extras = intent.getExtras();
+            this.image = (Bitmap) extras.get("data");
+            this.photo.setImageBitmap(this.image);
         }
     }
 }

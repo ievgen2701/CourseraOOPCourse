@@ -3,35 +3,35 @@ package com.example.sharingapp;
 /**
  * Dimensions class
  */
-public class Dimensions {
+public final class Dimensions {
 
     private String length;
     private String width;
     private String height;
 
-    public Dimensions(String length, String width, String height) {
+    public Dimensions(final String length, final String width, final String height) {
         this.length = length;
         this.width = width;
         this.height = height;
     }
 
     public String getLength() {
-        return length;
+        return this.length;
     }
 
     public String getWidth() {
-        return width;
+        return this.width;
     }
 
     public String getHeight() {
-        return height;
+        return this.height;
     }
 
     public String getDimensions() {
-        return length + " x " + width + " x " + height;
+        return this.length + " x " + this.width + " x " + this.height;
     }
 
-    public void setDimensions(String length, String width, String height) {
+    public void setDimensions(final String length, final String width, final String height) {
         this.length = length;
         this.width = width;
         this.height = height;

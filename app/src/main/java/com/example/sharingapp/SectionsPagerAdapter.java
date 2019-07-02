@@ -8,24 +8,21 @@ import android.support.v4.app.FragmentPagerAdapter;
  * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
  * one of the sections/tabs/pages.
  */
-public class SectionsPagerAdapter extends FragmentPagerAdapter {
+public final class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    public SectionsPagerAdapter(final FragmentManager fm) {
         super(fm);
     }
 
     @Override
-    public Fragment getItem(int position) {
+    public Fragment getItem(final int position) {
         switch (position) {
             case 0:
-                AllItemsFragment all_items_fragment = new AllItemsFragment();
-                return all_items_fragment;
+                return new AllItemsFragment();
             case 1:
-                AvailableItemsFragment available_items_fragment = new AvailableItemsFragment();
-                return available_items_fragment;
+                return new AvailableItemsFragment();
             case 2:
-                BorrowedItemsFragment borrowed_items_fragment = new BorrowedItemsFragment();
-                return borrowed_items_fragment;
+                return new BorrowedItemsFragment();
             default:
                 return null;
         }
@@ -37,7 +34,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
-    public CharSequence getPageTitle(int position) {
+    public CharSequence getPageTitle(final int position) {
         switch (position) {
             case 0:
                 return "All";
