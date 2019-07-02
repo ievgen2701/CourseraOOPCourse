@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -28,44 +27,38 @@ public abstract class ItemsFragment extends Fragment {
     private Context context;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        context = getContext();
-        item_list.loadItems(context);
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        this.context = getContext();
+        this.item_list.loadItems(this.context);
         this.inflater = inflater;
         this.container = container;
-
-        return rootView;
+        return this.rootView;
     }
 
-    public void setVariables(int resource, int id ) {
-        rootView = inflater.inflate(resource, container, false);
-        list_view = (ListView) rootView.findViewById(id);
-        selected_items = filterItems();
+    public void setVariables(final int resource, final int id ) {
+        this.rootView = this.inflater.inflate(resource, this.container, false);
+        this.list_view = this.rootView.findViewById(id);
+        this.selected_items = filterItems();
     }
 
-    public void setAdapter(Fragment fragment){
-        adapter = new ItemAdapter(context, selected_items, fragment);
-        list_view.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+    public void setAdapter(final Fragment fragment){
+        this.adapter = new ItemAdapter(this.context, this.selected_items, fragment);
+        this.list_view.setAdapter(this.adapter);
+        this.adapter.notifyDataSetChanged();
 
         // When item is long clicked, this starts EditItemActivity
-        list_view.setOnItemLongClickListener(new android.widget.AdapterView.OnItemLongClickListener() {
+        this.list_view.setOnItemLongClickListener((parent, view, pos, id) -> {
 
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int pos, long id) {
+            final Item item = ItemsFragment.this.adapter.getItem(pos);
 
-                Item item = adapter.getItem(pos);
+            final int meta_pos = ItemsFragment.this.item_list.getIndex(item);
+            if (meta_pos >= 0) {
 
-                int meta_pos = item_list.getIndex(item);
-                if (meta_pos >= 0) {
-
-                    Intent edit = new Intent(context, EditItemActivity.class);
-                    edit.putExtra("position", meta_pos);
-                    startActivity(edit);
-                }
-                return true;
+                final Intent edit = new Intent(ItemsFragment.this.context, EditItemActivity.class);
+                edit.putExtra("position", meta_pos);
+                startActivity(edit);
             }
+            return true;
         });
     }
 
