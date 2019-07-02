@@ -7,8 +7,10 @@ import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -18,12 +20,14 @@ import android.widget.TextView;
  */
 public class EditItemActivity extends AppCompatActivity {
 
-    private ItemList item_list = new ItemList();
+    private final ItemList item_list = new ItemList();
     private Item item;
     private Context context;
 
+    private final ContactList contact_list = new ContactList();
+
     private Bitmap image;
-    private int REQUEST_CODE = 1;
+    private final int REQUEST_CODE = 1;
     private ImageView photo;
 
     private EditText title;
@@ -33,154 +37,170 @@ public class EditItemActivity extends AppCompatActivity {
     private EditText width;
     private EditText height;
     private EditText borrower;
-    private TextView  borrower_tv;
+    private Spinner borrower_spinner;
+    private TextView borrower_tv;
     private Switch status;
+    private EditText invisible;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_item);
 
-        title = (EditText) findViewById(R.id.title);
-        maker = (EditText) findViewById(R.id.maker);
-        description = (EditText) findViewById(R.id.description);
-        length = (EditText) findViewById(R.id.length);
-        width = (EditText) findViewById(R.id.width);
-        height = (EditText) findViewById(R.id.height);
-        borrower = (EditText) findViewById(R.id.borrower);
-        borrower_tv = (TextView) findViewById(R.id.borrower_tv);
-        photo = (ImageView) findViewById(R.id.image_view);
-        status = (Switch) findViewById(R.id.available_switch);
+        this.title = findViewById(R.id.title);
+        this.maker = findViewById(R.id.maker);
+        this.description = findViewById(R.id.description);
+        this.length = findViewById(R.id.length);
+        this.width = findViewById(R.id.width);
+        this.height = findViewById(R.id.height);
+        this.borrower_spinner = findViewById(R.id.borrower_spinner);
+        this.borrower_tv = findViewById(R.id.borrower_tv);
+        this.photo = findViewById(R.id.image_view);
+        this.status = findViewById(R.id.available_switch);
+        this.invisible = findViewById(R.id.invisible);
+        this.invisible.setVisibility(View.GONE);
+        this.context = getApplicationContext();
+        this.item_list.loadItems(this.context);
+        this.contact_list.loadContacts(this.context);
 
-        context = getApplicationContext();
-        item_list.loadItems(context);
+        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item,
+                this.contact_list.getAllUsernames());
+        this.borrower_spinner.setAdapter(adapter);
 
-        Intent intent = getIntent(); // Get intent from ItemsFragment
-        int pos = intent.getIntExtra("position", 0);
+        final Intent intent = getIntent(); // Get intent from ItemsFragment
+        final int pos = intent.getIntExtra("position", 0);
 
-        item = item_list.getItem(pos);
+        this.item = this.item_list.getItem(pos);
 
-        title.setText(item.getTitle());
-        maker.setText(item.getMaker());
-        description.setText(item.getDescription());
+        final Contact contact = this.item.getBorrower();
+        if (contact != null){
+            final int contact_pos = this.contact_list.getIndex(contact);
+            this.borrower_spinner.setSelection(contact_pos);
+        }
 
-        Dimensions dimensions = item.getDimensions();
 
-        length.setText(dimensions.getLength());
-        width.setText(dimensions.getWidth());
-        height.setText(dimensions.getHeight());
+        this.title.setText(this.item.getTitle());
+        this.maker.setText(this.item.getMaker());
+        this.description.setText(this.item.getDescription());
 
-        String status_str = item.getStatus();
+        final Dimensions dimensions = this.item.getDimensions();
+
+        this.length.setText(dimensions.getLength());
+        this.width.setText(dimensions.getWidth());
+        this.height.setText(dimensions.getHeight());
+
+        final String status_str = this.item.getStatus();
         if (status_str.equals("Borrowed")) {
-            status.setChecked(false);
-            borrower.setText(item.getBorrower());
+            this.status.setChecked(false);
         } else {
-            borrower_tv.setVisibility(View.GONE);
-            borrower.setVisibility(View.GONE);
+            this.borrower_tv.setVisibility(View.GONE);
+            this.borrower.setVisibility(View.GONE);
         }
 
-        image = item.getImage();
-        if (image != null) {
-            photo.setImageBitmap(image);
+        this.image = this.item.getImage();
+        if (this.image != null) {
+            this.photo.setImageBitmap(this.image);
         } else {
-            photo.setImageResource(android.R.drawable.ic_menu_gallery);
+            this.photo.setImageResource(android.R.drawable.ic_menu_gallery);
         }
     }
 
-    public void addPhoto(View view) {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    public void addPhoto(final View view) {
+        final Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(intent, REQUEST_CODE);
+            startActivityForResult(intent, this.REQUEST_CODE);
         }
     }
 
-    public void deletePhoto(View view) {
-        image = null;
-        photo.setImageResource(android.R.drawable.ic_menu_gallery);
+    public void deletePhoto(final View view) {
+        this.image = null;
+        this.photo.setImageResource(android.R.drawable.ic_menu_gallery);
     }
 
     @Override
-    protected void onActivityResult(int request_code, int result_code, Intent intent){
-        if (request_code == REQUEST_CODE && result_code == RESULT_OK){
-            Bundle extras = intent.getExtras();
-            image = (Bitmap) extras.get("data");
-            photo.setImageBitmap(image);
+    protected void onActivityResult(final int request_code, final int result_code, final Intent intent) {
+        if (request_code == this.REQUEST_CODE && result_code == RESULT_OK) {
+            final Bundle extras = intent.getExtras();
+            this.image = (Bitmap) extras.get("data");
+            this.photo.setImageBitmap(this.image);
         }
     }
 
-    public void deleteItem(View view) {
-        item_list.deleteItem(item);
-        item_list.saveItems(context);
+    public void deleteItem(final View view) {
+        this.item_list.deleteItem(this.item);
+        this.item_list.saveItems(this.context);
 
         // End EditItemActivity
-        Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void saveItem(View view) {
+    public void saveItem(final View view) {
 
-        String title_str = title.getText().toString();
-        String maker_str = maker.getText().toString();
-        String description_str = description.getText().toString();
-        String length_str = length.getText().toString();
-        String width_str = width.getText().toString();
-        String height_str = height.getText().toString();
-        String borrower_str = borrower.getText().toString();
+        final String title_str = this.title.getText().toString();
+        final String maker_str = this.maker.getText().toString();
+        final String description_str = this.description.getText().toString();
+        final String length_str = this.length.getText().toString();
+        final String width_str = this.width.getText().toString();
+        final String height_str = this.height.getText().toString();
 
-        Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
+        Contact contact = null;
+        if (!this.status.isChecked()) {
+            final String borrower_str = this.borrower_spinner.getSelectedItem().toString();
+            contact = this.contact_list.getContactByUsername(borrower_str);
+        }
+
+
+        final Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
 
         if (title_str.equals("")) {
-            title.setError("Empty field!");
+            this.title.setError("Empty field!");
             return;
         }
 
         if (maker_str.equals("")) {
-            maker.setError("Empty field!");
+            this.maker.setError("Empty field!");
             return;
         }
 
         if (description_str.equals("")) {
-            description.setError("Empty field!");
+            this.description.setError("Empty field!");
             return;
         }
 
         if (length_str.equals("")) {
-            length.setError("Empty field!");
+            this.length.setError("Empty field!");
             return;
         }
 
         if (width_str.equals("")) {
-            width.setError("Empty field!");
+            this.width.setError("Empty field!");
             return;
         }
 
         if (height_str.equals("")) {
-            height.setError("Empty field!");
-            return;
-        }
-
-        if (borrower_str.equals("") && !status.isChecked()) {
-            borrower.setError("Empty field!");
+            this.height.setError("Empty field!");
             return;
         }
 
         // Reuse the item id
-        String id = item.getId();
-        item_list.deleteItem(item);
+        final String id = this.item.getId();
+        this.item_list.deleteItem(this.item);
 
-        Item updated_item = new Item(title_str, maker_str, description_str, dimensions, image, id);
+        final Item updated_item = new Item(title_str, maker_str, description_str, dimensions, this.image, id);
 
-        boolean checked = status.isChecked();
+        final boolean checked = this.status.isChecked();
         if (!checked) {
             updated_item.setStatus("Borrowed");
             updated_item.setBorrower(borrower_str);
         }
-        item_list.addItem(updated_item);
+        this.item_list.addItem(updated_item);
 
-        item_list.saveItems(context);
+        this.item_list.saveItems(this.context);
 
         // End EditItemActivity
-        Intent intent = new Intent(this, MainActivity.class);
+        final Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
@@ -188,18 +208,27 @@ public class EditItemActivity extends AppCompatActivity {
      * Checked = Available
      * Unchecked = Borrowed
      */
-    public void toggleSwitch(View view){
-        if (status.isChecked()) {
-            // Means was previously borrowed
-            borrower.setVisibility(View.GONE);
-            borrower_tv.setVisibility(View.GONE);
-            item.setBorrower("");
-            item.setStatus("Available");
-
+    public void toggleSwitch(final View view) {
+        if (this.status.isChecked()) {
+            // Means was previously borrowed, switch was toggled to available
+            this.borrower_spinner.setVisibility(View.GONE);
+            this.borrower_tv.setVisibility(View.GONE);
+            this.item.setBorrower(null);
+            this.item.setStatus("Available");
         } else {
-            // Means was previously available
-            borrower.setVisibility(View.VISIBLE);
-            borrower_tv.setVisibility(View.VISIBLE);
+            // Means not borrowed
+            if (this.contact_list.getSize()==0){
+                // No contacts, need to add contacts to be able to add a borrower.
+                this.invisible.setEnabled(false);
+                this.invisible.setVisibility(View.VISIBLE);
+                this.invisible.requestFocus();
+                this.invisible.setError("No contacts available! Must add borrower to contacts.");
+                this.status.setChecked(true); // Set switch to available
+            } else {
+                // Means was previously available
+                this.borrower_spinner.setVisibility(View.VISIBLE);
+                this.borrower_tv.setVisibility(View.VISIBLE);
+            }
         }
     }
 }
