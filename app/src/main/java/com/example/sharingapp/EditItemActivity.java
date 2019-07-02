@@ -151,7 +151,6 @@ public class EditItemActivity extends AppCompatActivity {
             contact = this.contact_list.getContactByUsername(borrower_str);
         }
 
-
         final Dimensions dimensions = new Dimensions(length_str, width_str, height_str);
 
         if (title_str.equals("")) {
@@ -193,7 +192,7 @@ public class EditItemActivity extends AppCompatActivity {
         final boolean checked = this.status.isChecked();
         if (!checked) {
             updated_item.setStatus("Borrowed");
-            updated_item.setBorrower(borrower_str);
+            updated_item.setBorrower(contact);
         }
         this.item_list.addItem(updated_item);
 

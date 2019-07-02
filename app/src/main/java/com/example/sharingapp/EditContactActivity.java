@@ -48,8 +48,7 @@ public final class EditContactActivity extends AppCompatActivity {
         }
         final String username_str = this.username.getText().toString();
         final String id = this.contact.getId(); // Reuse the contact id
-        // Check that username is unique AND username is changed (Note: if username was
-        not changed
+        // Check that username is unique AND username is changed (Note: if username was not changed
         // then this should be fine, because it was already unique.)
         if (!this.contact_list.isUsernameAvailable(username_str) &&
                 !(this.contact.getUsername().equals(username_str))) {

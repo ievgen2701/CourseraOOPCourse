@@ -20,13 +20,13 @@ import java.util.ArrayList;
 public final class ItemList {
 
     private static ArrayList<Item> items;
-    private String FILENAME = "items.sav";
+    private static final String FILENAME = "items.sav";
 
     public ItemList() {
-        items = new ArrayList<Item>();
+        items = new ArrayList<>();
     }
 
-    public void setItems(ArrayList<Item> item_list) {
+    public void setItems(final ArrayList<Item> item_list) {
         items = item_list;
     }
 
@@ -34,21 +34,21 @@ public final class ItemList {
         return items;
     }
 
-    public void addItem(Item item) {
+    public void addItem(final Item item) {
         items.add(item);
     }
 
-    public void deleteItem(Item item) {
+    public void deleteItem(final Item item) {
         items.remove(item);
     }
 
-    public Item getItem(int index) {
+    public Item getItem(final int index) {
         return items.get(index);
     }
 
-    public int getIndex(Item item) {
+    public int getIndex(final Item item) {
         int pos = 0;
-        for (Item i : items) {
+        for (final Item i : items) {
             if (item.getId().equals(i.getId())) {
                 return pos;
             }
@@ -61,41 +61,40 @@ public final class ItemList {
         return items.size();
     }
 
-    public void loadItems(Context context) {
-
+    public void loadItems(final Context context) {
         try {
-            FileInputStream fis = context.openFileInput(this.FILENAME);
-            InputStreamReader isr = new InputStreamReader(fis);
-            Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<Item>>() {
+            final FileInputStream fis = context.openFileInput(FILENAME);
+            final InputStreamReader isr = new InputStreamReader(fis);
+            final Gson gson = new Gson();
+            final Type listType = new TypeToken<ArrayList<Item>>() {
             }.getType();
             items = gson.fromJson(isr, listType); // temporary
             fis.close();
-        } catch (FileNotFoundException e) {
-            items = new ArrayList<Item>();
-        } catch (IOException e) {
-            items = new ArrayList<Item>();
+        } catch (final FileNotFoundException e) {
+            items = new ArrayList<>();
+        } catch (final IOException e) {
+            items = new ArrayList<>();
         }
     }
 
-    public void saveItems(Context context) {
+    public void saveItems(final Context context) {
         try {
-            FileOutputStream fos = context.openFileOutput(this.FILENAME, 0);
-            OutputStreamWriter osw = new OutputStreamWriter(fos);
-            Gson gson = new Gson();
+            final FileOutputStream fos = context.openFileOutput(FILENAME, 0);
+            final OutputStreamWriter osw = new OutputStreamWriter(fos);
+            final Gson gson = new Gson();
             gson.toJson(items, osw);
             osw.flush();
             fos.close();
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }
 
-    public ArrayList<Item> filterItemsByStatus(String status) {
-        ArrayList<Item> selected_items = new ArrayList<>();
-        for (Item i : items) {
+    public ArrayList<Item> filterItemsByStatus(final String status) {
+        final ArrayList<Item> selected_items = new ArrayList<>();
+        for (final Item i : items) {
             if (i.getStatus().equals(status)) {
                 selected_items.add(i);
             }
@@ -104,9 +103,9 @@ public final class ItemList {
     }
 
     public ArrayList<Contact> getActiveBorrowers() {
-        ArrayList<Contact> active_borrowers = new ArrayList<Contact>();
-        for (Item i : items) {
-            Contact borrower = i.getBorrower();
+        final ArrayList<Contact> active_borrowers = new ArrayList<>();
+        for (final Item i : items) {
+            final Contact borrower = i.getBorrower();
             if (borrower != null) {
                 active_borrowers.add(borrower);
             }

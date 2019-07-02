@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * ContactAdapter is responsible for what information is displayed in ListView entries.
@@ -18,7 +19,7 @@ public final class ContactAdapter extends ArrayAdapter<Contact> {
     private final LayoutInflater inflater;
     private final Context context;
 
-    public ContactAdapter(final Context context, final ArrayList<Contact> contacts) {
+    public ContactAdapter(final Context context, final List<Contact> contacts) {
         super(context, 0, contacts);
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -33,7 +34,7 @@ public final class ContactAdapter extends ArrayAdapter<Contact> {
         final String email = "Email: " + contact.getEmail();
         // Check if an existing view is being reused, otherwise inflate the view.
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.contactlist_contact,
+            convertView = LayoutInflater.from(this.context).inflate(R.layout.contactlist_contact,
                     parent, false);
         }
         final TextView username_tv = convertView.findViewById(R.id.username_tv);
